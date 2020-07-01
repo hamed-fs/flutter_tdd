@@ -1,32 +1,59 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter_deriv_api/services/connection/api_manager/connection_information.dart';
-import 'package:flutter_deriv_api/state/connection/connection_bloc.dart';
+import 'package:flutter_deriv_api/state/connection/connection_bloc.dart'
+    as api_connection;
 
+/// Sample App main widget
 class LoginPage extends StatefulWidget {
-  LoginPage({Key key, this.title}) : super(key: key);
-
-  final String title;
-
   @override
   _LoginPageState createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
-  ConnectionBloc _connectionBloc;
+  api_connection.ConnectionBloc _connectionBloc;
 
   @override
   void initState() {
     super.initState();
+
+    _connectionBloc = api_connection.ConnectionBloc(
+      ConnectionInformation(),
+    );
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(),
-    );
+  void dispose() {
+    _connectionBloc.close();
+
+    super.dispose();
   }
+
+  @override
+  Widget build(BuildContext context) => BlocProvider(
+        create: (BuildContext context) => _connectionBloc,
+        child: Scaffold(
+          appBar: AppBar(
+            title: const Text('Flutter TDD Login'),
+          ),
+          body: BlocBuilder<api_connection.ConnectionBloc,
+              api_connection.ConnectionState>(
+            builder: (
+              BuildContext context,
+              api_connection.ConnectionState state,
+            ) {
+              if (state is api_connection.Connected) {
+                return Center(child: Text('Connected!'));
+              } else if (state is api_connection.InitialConnectionState) {
+                return Center(child: CircularProgressIndicator());
+              } else if (state is api_connection.ConnectionError) {
+                return Center(child: Text('Connection Error\n${state.error}'));
+              }
+
+              return Center(child: CircularProgressIndicator());
+            },
+          ),
+        ),
+      );
 }

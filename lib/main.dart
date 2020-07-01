@@ -13,7 +13,7 @@ class App extends StatelessWidget {
         primarySwatch: Colors.blueGrey,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: LoginPage(title: 'Flutter TDD Login Home Page'),
+      home: LoginPage(),
     );
   }
 }

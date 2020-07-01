@@ -11,6 +11,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_deriv_api:
+    path: ./flutter-deriv-api/
 
   cupertino_icons: ^0.1.3
 

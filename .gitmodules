@@ -1,0 +1,4 @@
+[submodule "flutter-deriv-api"]
+	path = flutter-deriv-api
+	url = https://github.com/regentmarkets/flutter-deriv-api.git
+	branch = dev
